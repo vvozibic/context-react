@@ -1,10 +1,16 @@
 import React from "react";
 
-const MyContext = React.createContext("My");
+const MyContext = React.createContext();
 
 // это может быть любая функция реализующая запрос данных на сервер
 // axios, fetch, etc.
-const fetchData = () => {};
+const fetchData = () => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve([1, 2, 3, 4]);
+    }, 2000);
+  });
+};
 
 class MyContextProvider extends React.Component {
   state = {
@@ -15,17 +21,17 @@ class MyContextProvider extends React.Component {
   fetchData = async () => {
     // этот метод может использовать любой подход для запроса
     // данных с сервера
-    const { response } = await fetchData();
+    const data = await fetchData();
 
     this.setState({
-      data: response,
-      status: "success"
+      status: "success",
+      data
     });
   };
 
   render() {
     const value = {
-      orders: this.state.orders,
+      data: this.state.data,
       fetchData: this.fetchData
     };
 
